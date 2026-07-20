@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>رسالة لمريم ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      background: linear-gradient(145deg, #ffb7c5 0%, #ff8aa2 100%);
+      font-family: 'Baloo Bhaijaan 2', 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .bg-hearts {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .bh {
+      position: absolute;
+      font-size: 22px;
+      opacity: 0.18;
+      animation: floatUp linear infinite;
+    }
+    @keyframes floatUp {
+      from { transform: translateY(105vh) rotate(0deg); }
+      to   { transform: translateY(-10vh) rotate(25deg); }
+    }
+
+    .page {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      min-height: 100vh;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 16px 30px;
+      z-index: 1;
+      animation: fadeSlide 0.5s ease;
+    }
+    .page.active { display: flex; }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(18px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    #page1 { background: transparent; }
+
+    .circle-btn {
+      width: 90px; height: 90px;
+      border-radius: 50%;
+      background: #fff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 45px;
+      cursor: pointer;
+      box-shadow: 0 0 0 6px rgba(255,150,180,0.35), 0 6px 20px rgba(255,100,150,0.4);
+      animation: pulseBig 2s ease-in-out infinite;
+      transition: transform 0.15s;
+      color: #ffb6c1;
+    }
+    .circle-btn:active { transform: scale(0.93); }
+    @keyframes pulseBig {
+      0%,100% { box-shadow: 0 0 0 6px rgba(255,150,180,0.35), 0 6px 20px rgba(255,100,150,0.4); }
+      50%      { box-shadow: 0 0 0 12px rgba(255,150,180,0.15), 0 6px 30px rgba(255,100,150,0.6); }
+    }
+    .p1-label {
+      margin-top: 22px;
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 500;
+      text-align: center;
+      direction: rtl;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+
+    .masha-img {
+      width: 88vw;
+      max-width: 370px;
+      max-height: 55vh;
+      object-fit: contain;
+      object-position: top;
+      border-radius: 22px;
+      box-shadow: 0 8px 32px rgba(200,50,120,0.25);
+      flex-shrink: 0;
+    }
+
+    .card {
+      background: rgba(0,0,0,0.78);
+      border: 2px solid #ff80ab;
+      border-radius: 18px;
+      padding: 0px 16px;
+      margin: 14px auto 0;
+      width: fit-content;
+      max-width: 88vw;
+      max-height: 0px;
+      overflow: hidden;
+      transition: max-height 0.08s ease, padding 0.08s ease;
+    }
+    .card.has-text { padding: 13px 16px; }
+    .card-text {
+      color: #fff;
+      font-size: 16px;
+      font-weight: normal;
+      line-height: 1.65;
+      text-align: right;
+      direction: rtl;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #ff6fb0, #e0208a);
+      color: #fff;
+      font-family: 'Baloo Bhaijaan 2', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      border: none;
+      border-radius: 30px;
+      padding: 13px 32px;
+      margin-top: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(220,40,130,0.4);
+      direction: rtl;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.85);
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .btn.show { opacity: 1; pointer-events: all; transform: scale(1); }
+    .btn:active { transform: scale(0.95) !important; }
+
+    .heart-btn {
+      font-size: 90px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-top: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.7);
+      transition: opacity 0.3s, transform 0.3s;
+      filter: drop-shadow(0 0 16px rgba(255,50,80,0.5));
+    }
+    .heart-btn.show {
+      opacity: 1;
+      pointer-events: all;
+      transform: scale(1);
+      animation: heartbeat 1.3s ease-in-out infinite;
+    }
+    @keyframes heartbeat {
+      0%,100% { transform: scale(1); }
+      15% { transform: scale(1.2); }
+      30% { transform: scale(1); }
+      45% { transform: scale(1.1); }
+      60% { transform: scale(1); }
+    }
+
+    .page8-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+    .footer-note {
+      font-size: 13px;
+      color: #fff0f3;
+      text-align: center;
+      margin-top: 20px;
+      opacity: 0.9;
+      background: rgba(0,0,0,0.3);
+      padding: 5px 12px;
+      border-radius: 60px;
+    }
+
+    .back-home-btn {
+      background: linear-gradient(135deg, #ff6fb0, #e0208a);
+      color: #fff;
+      font-family: 'Baloo Bhaijaan 2', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      border: none;
+      border-radius: 30px;
+      padding: 12px 28px;
+      margin-top: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(220,40,130,0.4);
+      direction: rtl;
+      transition: transform 0.15s;
+    }
+    .back-home-btn:active { transform: scale(0.95); }
+
+    .play-btn {
+      background: rgba(255,255,255,0.25);
+      border: 1px solid white;
+      border-radius: 50px;
+      padding: 8px 20px;
+      margin-top: 15px;
+      font-size: 14px;
+      color: white;
+      cursor: pointer;
+      font-family: inherit;
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-hearts" id="bgHearts"></div>
+
+<audio id="loveSong" loop>
+  <source src="https://archive.org/download/elissa-ayami-bik/Elissa%20-%20Ayami%20Bik.mp3" type="audio/mpeg">
+</audio>
+
+<div class="page active" id="page1">
+  <button class="circle-btn" onclick="goTo(2)">♥</button>
+  <div class="p1-label">اذا انتِ مريم دوسي على الگلب</div>
+</div>
+
+<div class="page" id="page2">
+  <img class="<img src="https://i.pinimg.com/originals/a0/02/b6/a002b665fa9be8cd445499252062f8b5.gif" alt="Milk and Mocha Cute Hug">
+  <div class="card" id="card2"><div class="card-text" id="text2"></div></div>
+  <button class="btn" id="btn2" onclick="goTo(3)">شنو؟</button>
+</div>
+
+<div class="page" id="page3">
+  <img class="masha-img" src="https://i.ibb.co/xq09nK6f/Screenshot-20260523-180847-Instagram.jpg" alt="صورة">
+  <div class="card" id="card3"><div class="card-text" id="text3"></div></div>
+  <button class="btn" id="btn3" onclick="goTo(4)">مو صحيح جذب جذب</button>
+</div>
+
+<div class="page" id="page4">
+  <img class="masha-img" src="https://i.ibb.co/yFHGNgrp/Screenshot-20260523-180854-Instagram.jpg" alt="صورة">
+  <div class="card" id="card4"><div class="card-text" id="text4"></div></div>
+  <button class="btn" id="btn4" onclick="goTo(5)">احم ماكو احد</button>
+</div>
+
+<div class="page" id="page5">
+  <img class="masha-img" src="https://i.ibb.co/gLdDGYP3/Screenshot-20260523-180902-Instagram.jpg" alt="صورة">
+  <div class="card" id="card5"><div class="card-text" id="text5"></div></div>
+  <button class="btn" id="btn5" onclick="goTo(6)">يعني شتريديني أسوي؟ أبچي مثلاً؟</button>
+</div>
+
+<div class="page" id="page6">
+  <img class="masha-img" src="https://i.ibb.co/gLdDGYP3/Screenshot-20260523-180902-Instagram.jpg" alt="صورة">
+  <div class="card" id="card6"><div class="card-text" id="text6"></div></div>
+  <button class="btn" id="btn6" onclick="goTo(7)">مدري 👈🏻👉🏻</button>
+</div>
+
+<div class="page" id="page7">
+  <img class="masha-img" src="https://i.ibb.co/zWCtfH3S/Screenshot-20260523-180909-Instagram.jpg" alt="صورة">
+  <div class="card" id="card7"><div class="card-text" id="text7"></div></div>
+  <button class="heart-btn" id="btn7" onclick="goTo(8)">❤️</button>
+</div>
+
+<div class="page" id="page8">
+  <div class="page8-container">
+    <img class="masha-img" id="page8Image" src="https://i.ibb.co/q3wLP1LW/cf644636ca269381b7033839f75bd8e4.jpg" alt="صورتها">
+    <div class="card has-text" style="max-height: 200px;">
+      <div class="card-text">ولج اني هايمه بيج 🥹</div>
+    </div>
+    <div class="footer-note">أيامي بيك - إليسا</div>
+    <button class="play-btn" onclick="playMusic()">▶ تشغيل الموسيقى</button>
+    <button class="back-home-btn" onclick="goToStart()">⟳ العودة للبداية</button>
+  </div>
+</div>
+
+<script>
+  const TEXTS = {
+    2: 'هلو مريم تعالي عندي سوالف وياج',
+    3: 'يلا بسم الله سامعه انو گلبچ يدك بسرعه وتصيري تبتسمين مثل الخبله من تراسلين شخص معين صحيح هالحجيي ؟؟',
+    4: 'امممم يعني اكو شخص!!! احجيلي احجيلي احجيلي وحق الله مااكول لاحد 🥺',
+    5: 'إذا ماكو أحد، ليش چنتِ تبتسمين لبارحه مثل الخبلة من راسلتي إيناس؟ حتى بنت خالتچ گالتلچ جاي تعيشين البدايات 😾',
+    6: 'لچ احچيلي الصدك تحبين إيناس لو لا 😾',
+    7: 'إذا تحبينها صدك دوسي على الگلب واعترفي ❣️',
+  };
+
+  const bgDiv = document.getElementById('bgHearts');
+  const hChars = ['💗','💕','🩷','❤️','💜','🤍'];
+  for (let i = 0; i < 18; i++) {
+    const d = document.createElement('div');
+    d.className = 'bh';
+    d.textContent = hChars[Math.floor(Math.random() * hChars.length)];
+    d.style.left = Math.random() * 100 + '%';
+    d.style.fontSize = (16 + Math.random() * 18) + 'px';
+    d.style.animationDuration = (7 + Math.random() * 8) + 's';
+    d.style.animationDelay = (Math.random() * 8) + 's';
+    bgDiv.appendChild(d);
+  }
+
+  let currentPage = 1;
+  let typingTimer = null;
+  let musicStarted = false;
+
+  const audio = document.getElementById('loveSong');
+
+  function playMusic() {
+    audio.currentTime = 176;
+    audio.play().then(() => {
+      musicStarted = true;
+    }).catch(e => console.log("خطأ:", e));
+  }
+
+  function goTo(n) {
+    if (typingTimer) clearTimeout(typingTimer);
+    document.getElementById('page' + currentPage).classList.remove('active');
+    currentPage = n;
+    document.getElementById('page' + n).classList.add('active');
+
+    if (n >= 2 && n <= 7) {
+      const card = document.getElementById('card' + n);
+      const textEl = document.getElementById('text' + n);
+      const btn = document.getElementById('btn' + n);
+
+      card.style.maxHeight = '0px';
+      card.classList.remove('has-text');
+      textEl.textContent = '';
+      btn.classList.remove('show');
+
+      setTimeout(() => typeText(textEl, card, btn, TEXTS[n], 52), 350);
+    }
+  }
+
+  function typeText(el, card, btn, text, speed) {
+    let i = 0;
+    function next() {
+      if (i < text.length) {
+        el.textContent += text[i];
+        i++;
+        card.classList.add('has-text');
+        card.style.maxHeight = (card.scrollHeight + 20) + 'px';
+        typingTimer = setTimeout(next, speed);
+      } else {
+        btn.classList.add('show');
+      }
+    }
+    next();
+  }
+
+  function goToStart() {
+    if (typingTimer) clearTimeout(typingTimer);
+    audio.currentTime = 176;
+    document.getElementById('page8').classList.remove('active');
+    document.getElementById('page1').classList.add('active');
+    currentPage = 1;
+    
+    for (let i = 2; i <= 7; i++) {
+      const card = document.getElementById('card' + i);
+      const textEl = document.getElementById('text' + i);
+      const btn = document.getElementById('btn' + i);
+      if (card) {
+        card.style.maxHeight = '0px';
+        card.classList.remove('has-text');
+      }
+      if (textEl) textEl.textContent = '';
+      if (btn) btn.classList.remove('show');
+    }
+  }
+</script>
+</body>
+</html>

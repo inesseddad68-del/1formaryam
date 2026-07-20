@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<!-- استيراد خط Great Vibes و El Messiri -->
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#ffe4ec;
+    --bg2:#ffd1e3;
+    --heart-line:#d9738f;
+    --heart-fill:#ffcfe1;
+    --text:#ffc2dc;
+    --pink-pink:#f15287;
+    --pink-glow: rgba(241, 82, 135, 0.65);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent; user-select:none;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    font-family:'El Messiri', sans-serif;
+    overflow:hidden;
+    touch-action: manipulation;
+  }
+  body{
+    background: #000;
+  }
+  #app{
+    position:relative;
+    width:100%; height:100vh;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .page{
+    position:absolute;
+    inset:0;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    padding:20px;
+    text-align:center;
+    animation: fadeIn .5s ease;
+  }
+  .page.active{ display:flex; }
+  @keyframes fadeIn{
+    from{ opacity:0; transform:translateY(12px) scale(.98); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+
+  /* PAGE 1 STYLES */
+  .heading{
+    font-family: 'Great Vibes', cursive;
+    font-weight: 400;
+    font-size: clamp(2.3rem, 9.5vw, 3.3rem);
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .hint{
+    font-family:'El Messiri', sans-serif;
+    font-weight: 500;
+    font-size: clamp(0.72rem, 3vw, 0.85rem);
+    color: rgba(255,194,220,0.7);
+    margin-top:-10px;
+  }
+
+  .heart-wrap{
+    position:relative;
+    width: min(210px, 60vw);
+    aspect-ratio: 1 / 0.9;
+    transition: filter .25s ease;
+  }
+  .heart-wrap svg{
+    position:absolute;
+    inset:0;
+    width:100%; height:100%;
+    overflow: visible;
+    transition: fill .25s ease, stroke .25s ease;
+  }
+  .heart-wrap path{
+    fill: var(--heart-fill);
+    stroke: var(--heart-line);
+    stroke-width: 0.9;
+    paint-order: stroke fill;
+    transition: fill .25s ease, stroke .25s ease;
+  }
+  .heart-wrap.success path{
+    fill:#eafaf1;
+    stroke:#3aa66a;
+  }
+  .heart-wrap.success{
+    animation: successPulse .6s ease;
+  }
+  @keyframes successPulse{
+    0%{ transform: scale(1); }
+    40%{ transform: scale(1.15); }
+    100%{ transform: scale(1); }
+  }
+  .heart-wrap.wrong path{
+    fill:#fde3e3;
+    stroke:#d9403f;
+  }
+  .heart-wrap.wrong .heart-svg{ animation: shakeHeart .45s; }
+  @keyframes shakeHeart{
+    10%,90%{ transform: translateX(-3px); }
+    20%,80%{ transform: translateX(4px); }
+    30%,50%,70%{ transform: translateX(-6px); }
+    40%,60%{ transform: translateX(6px); }
+  }
+
+  .success-check{
+    position:absolute;
+    left:50%; top:47%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: clamp(2.2rem, 10vw, 3rem);
+    color:#3aa66a;
+    z-index:6;
+    opacity:0;
+  }
+  .heart-wrap.success .success-check{
+    animation: checkPop .5s ease forwards .1s;
+  }
+  @keyframes checkPop{
+    0%{ transform: translate(-50%, -50%) scale(0); opacity:0; }
+    60%{ transform: translate(-50%, -50%) scale(1.2); opacity:1; }
+    100%{ transform: translate(-50%, -50%) scale(1); opacity:1; }
+  }
+
+  .wrong-mark{
+    position:absolute;
+    left:50%; top:47%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: clamp(2rem, 9vw, 2.7rem);
+    color:#d9403f;
+    z-index:6;
+    opacity:0;
+  }
+  .heart-wrap.wrong .wrong-mark{
+    animation: wrongPop .55s ease forwards;
+  }
+  @keyframes wrongPop{
+    0%{ transform: translate(-50%, -50%) scale(0); opacity:0; }
+    50%{ transform: translate(-50%, -50%) scale(1.25); opacity:1; }
+    75%{ transform: translate(-50%, -50%) scale(1); opacity:1; }
+    100%{ transform: translate(-50%, -50%) scale(1); opacity:0; }
+  }
+
+  .code-row{
+    position:absolute;
+    left:50%; top:47%;
+    transform: translate(-50%, -50%);
+    display:flex;
+    align-items:center;
+    gap: clamp(4px, 1.6vw, 8px);
+    z-index: 5;
+    direction: ltr;
+  }
+  .digit-stack{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:2px;
+  }
+  .digit-box{
+    width: clamp(28px, 8vw, 36px);
+    height: clamp(34px, 9.5vw, 42px);
+    border-radius: 7px;
+    background: #fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'El Messiri', sans-serif;
+    font-weight:700;
+    font-size: clamp(1rem, 4.4vw, 1.25rem);
+    color:#000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.18);
+    overflow:hidden;
+    cursor: pointer;
+    touch-action: none;
+  }
+  .slash{
+    color: var(--heart-line);
+    font-weight:700;
+    font-size: clamp(0.95rem, 3.8vw, 1.2rem);
+    margin: 0 1px;
+  }
+
+  .check-btn{
+    margin-top: 10px;
+    width: clamp(46px, 13vw, 54px);
+    height: clamp(46px, 13vw, 54px);
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(145deg, #ff6fa0, #e8437c);
+    color:#fff;
+    font-size: clamp(1.1rem, 4.6vw, 1.35rem);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    box-shadow: 0 4px 12px rgba(232,67,124,0.55);
+  }
+  .check-btn:active{ transform: scale(0.92); }
+  .check-btn:disabled{ opacity:0.5; pointer-events:none; }
+
+  /* GENERAL CARD & BADGE STYLES */
+  .p-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 330px;
+    gap: 16px;
+  }
+
+  .kitty-card {
+    width: 270px;
+    height: 270px;
+    background: #000;
+    border-radius: 28px;
+    border: 2.5px solid var(--pink-pink);
+    box-shadow: 0 0 16px rgba(241, 82, 135, 0.4);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .kitty-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .text-badge {
+    background-color: #000000;
+    border: 1.8px solid var(--pink-pink);
+    border-radius: 16px;
+    padding: 8px 20px;
+    color: #ffffff;
+    font-family: 'El Messiri', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    box-shadow: 0 0 12px rgba(241, 82, 135, 0.25);
+    margin-top: 2px;
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    max-width: 95%;
+    line-height: 1.4;
+  }
+
+  .hello-btn {
+    background: var(--pink-pink);
+    color: #ffffff;
+    border: none;
+    border-radius: 30px;
+    padding: 8px 36px;
+    font-family: 'El Messiri', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 20px var(--pink-glow);
+    transition: transform 0.15s ease, background 0.2s ease;
+    width: fit-content;
+    min-width: 110px;
+  }
+
+  .hello-btn:active {
+    transform: scale(0.93);
+    background: #e8437c;
+  }
+
+  .btn-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    position: relative;
+    min-height: 55px;
+  }
+
+  .action-btn {
+    background: var(--pink-pink);
+    color: #ffffff;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 18px;
+    font-family: 'El Messiri', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 18px var(--pink-glow);
+    transition: transform 0.15s ease;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.3;
+    max-width: 100%;
+  }
+
+  /* الأزرار الهاربة */
+  .runaway-btn {
+    position: relative;
+    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    z-index: 10;
+  }
+</style>
+</head>
+<body>
+
+<!-- عنصر الصوت مرتبط بملف الأغنية الخاص بكِ -->
+<audio id="bgMusic" loop>
+  <source src="04.Kelma.mp3" type="audio/mpeg">
+</audio>
+
+<div id="app">
+
+  <!-- PAGE 1: PASSWORD -->
+  <section class="page active" id="page1">
+    <div class="heading" dir="ltr">Mary, first put in the correct password !</div>
+    <div class="hint">اسحب الرقم لأعلى/لأسفل أو انقر لتغييره، ثم اضغط ✔</div>
+
+    <div class="heart-wrap" id="heartWrap">
+      <svg class="heart-svg" viewBox="0 0 24 22">
+        <path d="M12,21 C12,21 1,14.2 1,7.6 C1,3.9 3.8,1 7.3,1 C9.4,1 11.1,2 12,3.6 C12.9,2 14.6,1 16.7,1 C20.2,1 23,3.9 23,7.6 C23,14.2 12,21 12,21 Z"/>
+      </svg>
+
+      <div class="success-check">✓</div>
+      <div class="wrong-mark">✕</div>
+
+      <div class="code-row">
+        <div class="digit-stack">
+          <div class="digit-box" id="d0">0</div>
+        </div>
+        <div class="digit-stack">
+          <div class="digit-box" id="d1">0</div>
+        </div>
+        <span class="slash">/</span>
+        <div class="digit-stack">
+          <div class="digit-box" id="d2">0</div>
+        </div>
+        <div class="digit-stack">
+          <div class="digit-box" id="d3">0</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="check-btn" id="checkBtn">✔</button>
+  </section>
+
+  <!-- PAGE 2: MUSIC PAGE -->
+  <section class="page" id="page2">
+    <div class="p-container">
+      <div class="kitty-card">
+        <img src="https://i.ibb.co/HTB884yf/image.jpg" alt="Music Page" onerror="this.src='https://i.ibb.co/HTB884yf'; this.onerror=null;">
+      </div>
+
+      <div class="text-badge" id="typewriterText2">كلمة - رامي صبري</div>
+
+      <button class="hello-btn" id="playMusicBtn">▶ تشغيل الموسيقى</button>
+    </div>
+  </section>
+
+  <!-- PAGE 3 -->
+  <section class="page" id="page3">
+    <div class="p-container">
+      <div class="kitty-card">
+        <img src="https://i.ibb.co/0yNKfcKj/image.jpg" alt="Mary Image" onerror="this.src='https://i.ibb.co/0yNKfcKj'; this.onerror=null;">
+      </div>
+
+      <div class="text-badge" id="typewriterText3"></div>
+
+      <button class="hello-btn" id="p3Btn"></button>
+    </div>
+  </section>
+
+  <!-- PAGE 4 -->
+  <section class="page" id="page4">
+    <div class="p-container">
+      <div class="kitty-card">
+        <img src="https://i.ibb.co/qMDVx2NX/image.jpg" alt="Mary Page 4" onerror="this.src='https://i.ibb.co/qMDVx2NX'; this.onerror=null;">
+      </div>
+
+      <div class="text-badge" id="typewriterText4"></div>
+
+      <div class="btn-group">
+        <button class="action-btn" id="goodBtn">زينه الحمدلله</button>
+        <button class="action-btn runaway-btn" id="runawayBtn1">ضايجه</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 5 -->
+  <section class="page" id="page5">
+    <div class="p-container">
+      <div class="kitty-card">
+        <img src="https://i.ibb.co/LX8XSLq2/image.jpg" alt="Mary Page 5" onerror="this.src='https://i.ibb.co/LX8XSLq2'; this.onerror=null;">
+      </div>
+
+      <div class="text-badge" id="typewriterText5"></div>
+
+      <div class="btn-group">
+        <button class="action-btn" id="questionBtn">شنوو هو؟؟</button>
+        <button class="action-btn runaway-btn" id="runawayBtn2">خليه عندج</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 6 -->
+  <section class="page" id="page6">
+    <div class="p-container">
+      <div class="kitty-card">
+        <img src="https://i.ibb.co/CpjFMP7R/image.jpg" alt="Mary Page 6" onerror="this.src='https://i.ibb.co/CpjFMP7R'; this.onerror=null;">
+      </div>
+
+      <div class="text-badge" id="typewriterText6"></div>
+
+      <div class="btn-group">
+        <button class="action-btn" id="magicBtn">سحر ام عباس وداعتج</button>
+        <button class="action-btn runaway-btn" id="runawayBtn3">ما ماسوييت شي 🎀</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 7 -->
+  <section class="page" id="page7">
+    <div class="p-container">
+      <div class="kitty-card">
+        <img src="https://i.ibb.co/pBknHVF0/image.jpg" alt="Mary Page 7" onerror="this.src='https://i.ibb.co/pBknHVF0'; this.onerror=null;">
+      </div>
+
+      <div class="text-badge" id="typewriterText7"></div>
+
+      <div class="btn-group">
+        <button class="action-btn" id="p7Btn">مانريد الروح و العافية ؛ احنه الشفة مو محصليها مو انوب هال مواضيع ؟</button>
+        <button class="action-btn runaway-btn" id="runawayBtn4">ما ما جذابة</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 8 -->
+  <section class="page" id="page8">
+    <div class="p-container">
+      <div class="kitty-card">
+        <img src="https://i.ibb.co/cSphfS2f/image.jpg" alt="Mary Page 8" onerror="this.src='https://i.ibb.co/cSphfS2f'; this.onerror=null;">
+      </div>
+
+      <div class="text-badge" id="typewriterText8"></div>
+
+      <div class="btn-group">
+        <button class="action-btn" id="p8Btn">لا طبعا شو انتِ فد نوب صايرة ؟ قصدي شسمه يعني انتِ مو رومنسية يعني اهوو ..</button>
+        <button class="action-btn runaway-btn" id="runawayBtn5">وگحه</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 9 -->
+  <section class="page" id="page9">
+    <div class="p-container">
+      <div class="kitty-card">
+        <img src="https://i.ibb.co/YTLKLn2Z/image.jpg" alt="Mary Page 9" onerror="this.src='https://i.ibb.co/YTLKLn2Z'; this.onerror=null;">
+      </div>
+
+      <div class="text-badge" id="typewriterText9"></div>
+
+      <div class="btn-group">
+        <button class="action-btn" id="p9Btn">ما ما دروحي گال بوسه گال</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 10 -->
+  <section class="page" id="page10">
+    <div class="p-container">
+      <div class="kitty-card">
+        <img src="https://i.ibb.co/XfdKHSv2/image.jpg" alt="Mary Page 10" onerror="this.src='https://i.ibb.co/XfdKHSv2'; this.onerror=null;">
+      </div>
+
+      <div class="text-badge" id="typewriterText10"></div>
+
+      <div class="btn-group">
+        <button class="action-btn" id="p10Btn">خوب گولي ميته لتاخذي بوسه مني ترا أدري أنّي ما أتقاوم</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 11 -->
+  <section class="page" id="page11">
+    <div class="p-container">
+      <div class="kitty-card">
+        <img src="https://i.ibb.co/wZnZS115/image.jpg" alt="Mary Page 11" onerror="this.src='https://i.ibb.co/wZnZS115'; this.onerror=null;">
+      </div>
+
+      <div class="text-badge" id="typewriterText11"></div>
+
+      <div class="btn-group">
+        <button class="action-btn" id="p11Btn">خوش بس يعني ها مو عبالج ميتة عليج أني ! انوب ترفعيين خشمج🎀</button>
+        <button class="action-btn runaway-btn" id="runawayBtn6">لا مو عادي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 12 (LAST PAGE) -->
+  <section class="page" id="page12">
+    <div class="p-container">
+      <div class="kitty-card">
+        <img src="https://i.ibb.co/PzhVj7LF/image.jpg" alt="Mary Page 12" onerror="this.src='https://i.ibb.co/PzhVj7LF'; this.onerror=null;">
+      </div>
+
+      <div class="text-badge" id="typewriterText12"></div>
+
+      <div class="btn-group">
+        <button class="action-btn" id="p12Btn">Muaaah</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+function goTo(pageId){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  if(pageId === 'page3'){
+    startPage3Text();
+  } else if(pageId === 'page4'){
+    startPage4Text();
+  } else if(pageId === 'page5'){
+    startPage5Text();
+  } else if(pageId === 'page6'){
+    startPage6Text();
+  } else if(pageId === 'page7'){
+    startPage7Text();
+  } else if(pageId === 'page8'){
+    startPage8Text();
+  } else if(pageId === 'page9'){
+    startPage9Text();
+  } else if(pageId === 'page10'){
+    startPage10Text();
+  } else if(pageId === 'page11'){
+    startPage11Text();
+  } else if(pageId === 'page12'){
+    startPage12Text();
+  }
+}
+
+function typeWriter(element, text, speed = 25, callback) {
+  element.textContent = '';
+  let i = 0;
+  function type() {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      setTimeout(type, speed);
+    } else if (callback) {
+      callback();
+    }
+  }
+  type();
+}
+
+function startPage3Text(){
+  const badge = document.getElementById('typewriterText3');
+  const btn = document.getElementById('p3Btn');
+  typeWriter(badge, "هلووو ماري", 25, () => {
+    typeWriter(btn, "هلوو", 25);
+  });
+}
+
+function startPage4Text(){
+  const badge = document.getElementById('typewriterText4');
+  typeWriter(badge, "شلونجج شخبارج؟؟", 25);
+}
+
+function startPage5Text(){
+  const badge = document.getElementById('typewriterText5');
+  typeWriter(badge, "عساج دايما بخير يابعد حيليي ؛ اييي عندي سؤال الجج !", 25);
+}
+
+function startPage6Text(){
+  const badge = document.getElementById('typewriterText6');
+  typeWriter(badge, "شلون خليتيني هيج احبج ؟ شلون گدرتِ تتملكين كل جزء بيه وتنامين وتگعدين بگلبي هاا اريد جواب!!", 25);
+}
+
+function startPage7Text(){
+  const badge = document.getElementById('typewriterText7');
+  typeWriter(badge, "يا سحرر؟ لج ماخذة روحي انتِ ماخذة روحي ياا بعد هل الروح و العافية", 25);
+}
+
+function startPage8Text(){
+  const badge = document.getElementById('typewriterText8');
+  typeWriter(badge, "تريدين بوسه يعني؟؟", 25);
+}
+
+function startPage9Text(){
+  const badge = document.getElementById('typewriterText9');
+  typeWriter(badge, "هش كافي شبالعة مسجل؟ إذا ماتريدين بوسه فآني اريد", 25);
+}
+
+function startPage10Text(){
+  const badge = document.getElementById('typewriterText10');
+  typeWriter(badge, "اهوووو شگد حقيره", 25);
+}
+
+function startPage11Text(){
+  const badge = document.getElementById('typewriterText11');
+  typeWriter(badge, "تمام؛ اريد ابوسج لان انتِ ماتتقاومين ؛ عادي؟؟", 25);
+}
+
+function startPage12Text(){
+  const badge = document.getElementById('typewriterText12');
+  typeWriter(badge, "Muaaah Muaaah Muaaah", 25);
+}
+
+/* PAGE 1 LOGIC */
+const CODE = [0,2,2,8]; 
+const values = [0,0,0,0]; 
+const boxes = ['d0','d1','d2','d3'].map(id => document.getElementById(id));
+const heartWrap = document.getElementById('heartWrap');
+const checkBtn = document.getElementById('checkBtn');
+let locked = false;
+
+function render(){
+  boxes.forEach((b,i)=> b.textContent = values[i]);
+}
+
+function changeDigit(i, dir){
+  if(locked) return;
+  values[i] = (values[i] + dir + 10) % 10;
+  render();
+}
+
+function checkCode(){
+  if(locked) return;
+  const correct = values.every((v,i) => v === CODE[i]);
+
+  if(correct){
+    locked = true;
+    checkBtn.disabled = true;
+    heartWrap.classList.remove('wrong');
+    heartWrap.classList.add('success');
+    setTimeout(() => { goTo('page2'); }, 900);
+  } else {
+    heartWrap.classList.remove('wrong');
+    void heartWrap.offsetWidth;
+    heartWrap.classList.add('wrong');
+    setTimeout(() => { heartWrap.classList.remove('wrong'); }, 700);
+  }
+}
+
+checkBtn.addEventListener('click', checkCode);
+
+boxes.forEach((box, i) => {
+  let startY = null;
+  let isDragging = false;
+
+  box.addEventListener('pointerdown', (e) => {
+    startY = e.clientY;
+    isDragging = false;
+    box.setPointerCapture(e.pointerId);
+  });
+
+  box.addEventListener('pointermove', (e) => {
+    if (startY === null) return;
+    const dy = e.clientY - startY;
+    if (Math.abs(dy) > 15) {
+      isDragging = true;
+      changeDigit(i, dy < 0 ? 1 : -1);
+      startY = e.clientY;
+    }
+  });
+
+  box.addEventListener('pointerup', (e) => {
+    if (!isDragging && startY !== null) {
+      changeDigit(i, 1);
+    }
+    startY = null;
+    isDragging = false;
+    try { box.releasePointerCapture(e.pointerId); } catch(err){}
+  });
+
+  box.addEventListener('pointercancel', () => {
+    startY = null;
+    isDragging = false;
+  });
+
+  box.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    changeDigit(i, e.deltaY < 0 ? 1 : -1);
+  }, {passive:false});
+});
+
+render();
+
+/* MUSIC BUTTON LOGIC (Starts from 15th second) */
+document.getElementById('playMusicBtn').addEventListener('click', () => {
+  const music = document.getElementById('bgMusic');
+  music.currentTime = 15; // بدء تشغيل الأغنية من الثانية 15
+  music.play().catch(e => console.log("Audio play blocked", e));
+  goTo('page3');
+});
+
+/* PAGE TRANSITIONS */
+document.getElementById('p3Btn').addEventListener('click', () => {
+  goTo('page4');
+});
+
+document.getElementById('goodBtn').addEventListener('click', () => {
+  goTo('page5');
+});
+
+document.getElementById('questionBtn').addEventListener('click', () => {
+  goTo('page6');
+});
+
+document.getElementById('magicBtn').addEventListener('click', () => {
+  goTo('page7');
+});
+
+document.getElementById('p7Btn').addEventListener('click', () => {
+  goTo('page8');
+});
+
+document.getElementById('p8Btn').addEventListener('click', () => {
+  goTo('page9');
+});
+
+document.getElementById('p9Btn').addEventListener('click', () => {
+  goTo('page10');
+});
+
+document.getElementById('p10Btn').addEventListener('click', () => {
+  goTo('page11');
+});
+
+document.getElementById('p11Btn').addEventListener('click', () => {
+  goTo('page12');
+});
+
+/* RUNAWAY BUTTONS LOGIC */
+function escapeButton(btn) {
+  const x = (Math.random() - 0.5) * 220;
+  const y = (Math.random() - 0.5) * 160;
+  btn.style.transform = `translate(${x}px, ${y}px)`;
+}
+
+['runawayBtn1', 'runawayBtn2', 'runawayBtn3', 'runawayBtn4', 'runawayBtn5', 'runawayBtn6'].forEach(id => {
+  const btn = document.getElementById(id);
+  if(btn){
+    ['mouseover', 'touchstart', 'click'].forEach(evt => {
+      btn.addEventListener(evt, (e) => {
+        e.preventDefault();
+        escapeButton(btn);
+      });
+    });
+  }
+});
+
+/* FINAL ALERT */
+document.getElementById('p12Btn').addEventListener('click', () => {
+  alert('يا عمري أحبج هواية! ❤️✨');
+});
+</script>
+</body>
+</html>
